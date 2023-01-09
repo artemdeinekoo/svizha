@@ -114,9 +114,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+gettext = lambda s: s
 LANGUAGES = [
-    ('uk', 'Ukrainian'),
-    ('en', 'English'),
+    ('uk', gettext('Ukrainian')),
+    ('en', gettext('English')),
 ]
 
 # Static files (CSS, JavaScript, Images)
