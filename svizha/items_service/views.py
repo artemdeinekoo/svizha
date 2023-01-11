@@ -38,3 +38,5 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.serializer_class(products, many=True)
         return Response(serializer.data)
 
+
+

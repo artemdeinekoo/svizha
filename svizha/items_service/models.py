@@ -1,4 +1,14 @@
 from django.db import models
+from django.utils import timezone
+
+
+class Discount(models.Model):
+    discount_percentage = models.FloatField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.discount_percentage)
 
 
 class Category(models.Model):
@@ -10,6 +20,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
     image = models.ImageField(upload_to='products')
     price = models.IntegerField()
@@ -22,6 +33,11 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True)
 
+    def apply_discount(self):
+        if self.discount and self.discount.start_date <= timezone.now() <= self.discount.end_date:
+            discount_percentage = self.discount.discount_percentage
+            return self.price - (self.price * discount_percentage / 100)
+        return self.price
+
     def __str__(self):
         return self.title
-
