@@ -3,6 +3,9 @@ from django.utils import timezone
 
 
 class Discount(models.Model):
+    """
+    Class that represents discount system on the website.
+    """
     discount_percentage = models.FloatField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
@@ -11,8 +14,23 @@ class Discount(models.Model):
         return str(self.discount_percentage)
 
 
-class Category(models.Model):
+class SubCategory(models.Model):
+    """
+    Class that makes it possible to make subcategory for each category.
+    """
     title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+
+class Category(models.Model):
+    """
+    Class that represents category system on the website.
+    """
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='categories')
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='subcategory')
     slug = models.SlugField(max_length=200, unique=True)
 
     def __str__(self):
@@ -20,6 +38,9 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """
+    Class that represents product on the website.
+    """
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
     image = models.ImageField(upload_to='products')
@@ -34,6 +55,9 @@ class Product(models.Model):
     slug = models.SlugField(unique=True)
 
     def apply_discount(self):
+        """
+        Method that allows to use discounts.
+        """
         if self.discount and self.discount.start_date <= timezone.now() <= self.discount.end_date:
             discount_percentage = self.discount.discount_percentage
             return self.price - (self.price * discount_percentage / 100)

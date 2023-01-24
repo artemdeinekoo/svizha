@@ -1,5 +1,10 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Category, Product
+from .models import Category, Product, SubCategory
+
+
+@register(SubCategory)
+class SubCategoryTranslationOptions(TranslationOptions):
+    fields = ('title',)
 
 
 @register(Category)

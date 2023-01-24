@@ -14,6 +14,11 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def get_by_subcategory(self, request, subcategory_id):
+        categories = self.queryset.filter(subcategory_id=subcategory_id)
+        serializer = self.serializer_class(categories, many=True)
+        return Response(serializer.data)
+
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()

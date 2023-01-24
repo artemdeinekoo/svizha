@@ -3,18 +3,27 @@ from .models import Product, Category, Discount
 
 
 class DiscountSerializer(serializers.ModelSerializer):
+    """
+    Serializer that provides the info about discount.
+    """
     class Meta:
         model = Discount
         fields = ('discount_percentage', 'start_date', 'end_date')
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for Category
+    """
     class Meta:
         model = Category
-        fields = ('id', 'title', 'slug')
+        fields = ('id', 'title', 'subcategory', 'image', 'slug')
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Product
+    """
     discount = DiscountSerializer()
     discounted_price = serializers.SerializerMethodField()
 
@@ -26,4 +35,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'slug', 'discount', 'discounted_price')
 
     def get_discounted_price(self, obj):
+        """
+        Method to add discount info for json
+        """
         return int(obj.apply_discount())
