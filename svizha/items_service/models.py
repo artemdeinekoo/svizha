@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
+from authentication.models import User
 
 
 class Discount(models.Model):
@@ -65,3 +67,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Review(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_id')
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_id')
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField()

@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    'items_service',
-    'authentication',
 
     'allauth',
     'allauth.account',
@@ -48,6 +46,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.telegram',
+
+    'items_service',
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +97,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
-        'OAUTH_PKCE_ENABLED': True,
     },
 
     'facebook': {
@@ -109,11 +109,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'id',
             'first_name',
             'last_name',
-            'middle_name',
-            'name',
-            'name_format',
-            'picture',
-            'short_name'
         ],
         'EXCHANGE_TOKEN': True,
         'LOCALE_FUNC': 'path.to.callable',
@@ -128,6 +123,13 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_SESSION_REMEMBER = True
 
 AUTH_USER_MODEL = 'authentication.User'
 

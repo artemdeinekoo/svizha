@@ -44,4 +44,4 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
-
+#Дописать view для комментов

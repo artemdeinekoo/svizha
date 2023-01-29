@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -37,12 +38,16 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser):
+class User(AbstractUser, PermissionsMixin):
     """User model."""
 
     username = None
-    phone = models.CharField(max_length=15, blank=False, unique=True)
+    # phone_number = models.CharField(max_length=15, blank=False, unique=True)
     email = models.EmailField(_("email address"), blank=False, unique=True)
+    first_name = models.CharField(_('first name'), max_length=40, blank=True, null=True, unique=False)
+    last_name = models.CharField(_('last name'), max_length=40, blank=True, null=True, unique=False)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    phone_number = models.CharField(_('phone number'), max_length=12, blank=True, null=True, unique=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
