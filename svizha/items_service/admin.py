@@ -1,7 +1,8 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 
-from .models import Category, Product, Discount, SubCategory
+from .models import Category, Product, Discount, SubCategory, Review
+
 
 
 @admin.register(SubCategory)
@@ -35,3 +36,6 @@ class DiscountAdmin(admin.ModelAdmin):
     Class for administrating Discount model.
     """
     list_display = ('discount_percentage', 'start_date', 'end_date')
+
+
+admin.site.register(Review)
