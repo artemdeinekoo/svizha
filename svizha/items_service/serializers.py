@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
+
 from .models import Product, Category, Discount, Review
 
 
@@ -46,4 +48,5 @@ class ProductSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('product_id', 'user_id', 'rating', 'text')
+        fields = ('user_id', 'product_id', 'rating', 'comment')
+        read_only_fields = ('user_id',)

@@ -1,13 +1,19 @@
 from rest_framework import viewsets
+from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import CategorySerializer, ProductSerializer
-from .models import Category, Product
+from .serializers import CategorySerializer, ProductSerializer, ReviewSerializer
+from .models import Category, Product, Review
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.pagination import PageNumberPagination
 
 
 class ProductPagination(PageNumberPagination):
     page_size = 20
+
+
+class OneElementPagination(PageNumberPagination):
+    page_size = 1
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -44,4 +50,16 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
-#Дописать view для комментов
+class ReviewCreateView(CreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user)
+
+
+class ReviewListView(ListAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    pagination_class = OneElementPagination
